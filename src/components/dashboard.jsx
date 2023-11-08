@@ -1,6 +1,7 @@
 import React from 'react';
 
 const Dashboard = () => {
+  const authName = localStorage.getItem('auth_name');
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -22,12 +23,12 @@ const Dashboard = () => {
           <div className="collapse navbar-collapse" id="navbarNavDropdown">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="#">
+                <a className="nav-link active" aria-current="page" href="/dashboard">
                   Home
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <a className="nav-link" href="/posts">
                   Post
                 </a>
               </li>
@@ -40,6 +41,9 @@ const Dashboard = () => {
           </div>
         </div>
       </nav>
+      <div>
+    <h5 className='authName mt-5 text-center'>Welcome to Home Page <b>{authName}</b></h5>
+      </div>
     </div>
   );
 };

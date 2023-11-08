@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 const PostList = () => {
   const [posts, setPosts] = useState([]);
@@ -25,6 +25,45 @@ const PostList = () => {
 
   return (
     <div>
+      <div>
+        <nav className="navbar navbar-expand-lg bg-body-tertiary">
+          <div className="container-fluid">
+            <a className="navbar-brand" href="#">
+              Navbar
+            </a>
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarNavDropdown"
+              aria-controls="navbarNavDropdown"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon"></span>
+            </button>
+            <div className="collapse navbar-collapse" id="navbarNavDropdown">
+              <ul className="navbar-nav">
+                <li className="nav-item">
+                  <a className="nav-link active" aria-current="page" href="/dashboard">
+                    Home
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="/posts">
+                    Post
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="#">
+                    Logout
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
       <section className="ftco-section">
         <div className="container">
           <div className="row justify-content-center">
@@ -46,39 +85,51 @@ const PostList = () => {
                     </tr>
                   </thead>
                   <tbody>
-                  {
-                    posts?.map((postItem) => {
+                    {posts?.map((postItem, index) => {
                       return (
-                        <tr key={postItem?.id}>
-                      <th scope="row">{postItem?.id}</th>
-                      <td>{postItem?.title}</td>
-                      <td>{postItem?.description}</td>
-                      <td><img src={`http://127.0.0.1:8000/post-images/${postItem?.image}`} width="50" height="50" alt='post-image' style={{borderRadius: '150px' }}/></td>
-                      <td>
-                        <a
-                          className="btn btn-warning mx-2 btn-sm"
-                          type="button"
-                          href='/post-create'
-                        >
-                          Create
-                        </a>
-                        <a
-                          className="btn btn-secondary mx-2 btn-sm"
-                          type="button"
-                        >
-                          View
-                        </a>
-                        <a className="btn btn-primary mx-2 btn-sm" type="button">
-                          Edit
-                        </a>
-                        <a className="btn btn-danger mx-2 btn-sm" type="button">
-                          Delete
-                        </a>
-                      </td>
-                    </tr>
-                      )
-                    })
-                  }
+                        <tr key={index}>
+                          <td>{postItem?.id}</td>
+                          <td>{postItem?.title}</td>
+                          <td>{postItem?.description}</td>
+                          <td>
+                            <img
+                              src={`http://127.0.0.1:8000/post-images/${postItem?.image}`}
+                              width="50"
+                              height="50"
+                              alt="post-image"
+                              style={{ borderRadius: '150px' }}
+                            />
+                          </td>
+                          <td>
+                            <a
+                              className="btn btn-warning mx-2 btn-sm"
+                              type="button"
+                              href="/post-create"
+                            >
+                              Create
+                            </a>
+                            <a
+                              className="btn btn-secondary mx-2 btn-sm"
+                              type="button"
+                            >
+                              View
+                            </a>
+                            <a
+                              className="btn btn-primary mx-2 btn-sm"
+                              type="button"
+                            >
+                              Edit
+                            </a>
+                            <a
+                              className="btn btn-danger mx-2 btn-sm"
+                              type="button"
+                            >
+                              Delete
+                            </a>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
