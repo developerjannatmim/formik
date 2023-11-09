@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import Navbar from './../../components/Navbar';
 
 const initialValues = {
   title: '',
@@ -67,6 +68,9 @@ const CreatePost = () => {
   console.log(errors);
   return (
     <>
+    <div>
+      <Navbar/>
+    </div>
       <div className="d-flex">
         <div className="col overflow-hidden">
           <div className="container-fluid px-4">

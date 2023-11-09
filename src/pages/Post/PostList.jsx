@@ -1,8 +1,34 @@
 import React, { useState, useEffect } from 'react';
+import {Link} from 'react-router-dom';
+import Navbar from './../../components/Navbar';
 
 const PostList = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+const handlePostDelete = (e, id) => {
+  e.preventDefault();
+  const Clicked = e.currentTarget;
+  Clicked.innerText = 'deleting';
+
+  if(confirm(`Are you sure you want to delete this post id ${id} ?`)){
+    fetch(`http://127.0.0.1:8000/api/posts/${id}`, {
+      headers: {
+        Accept: 'application/json',
+      },
+      method: 'DELETE',
+    })
+    .then((response) => response.json())
+    .then((response) => {
+      console.log(response);
+      Clicked.closest('tr').remove();
+    })
+    .catch((error) => {
+      console.error(error);
+      setLoading(false);
+    });
+  }
+};
 
   useEffect(() => {
     fetch('http://127.0.0.1:8000/api/posts?', {
@@ -26,43 +52,7 @@ const PostList = () => {
   return (
     <div>
       <div>
-        <nav className="navbar navbar-expand-lg bg-body-tertiary">
-          <div className="container-fluid">
-            <a className="navbar-brand" href="#">
-              Navbar
-            </a>
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarNavDropdown"
-              aria-controls="navbarNavDropdown"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse" id="navbarNavDropdown">
-              <ul className="navbar-nav">
-                <li className="nav-item">
-                  <a className="nav-link active" aria-current="page" href="/dashboard">
-                    Home
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="/posts">
-                    Post
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">
-                    Logout
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </nav>
+      <Navbar/>
       </div>
       <section className="ftco-section">
         <div className="container">
@@ -101,31 +91,35 @@ const PostList = () => {
                             />
                           </td>
                           <td>
-                            <a
+                            <Link
                               className="btn btn-warning mx-2 btn-sm"
                               type="button"
-                              href="/post-create"
+                              to="/post-create"
                             >
                               Create
-                            </a>
-                            <a
+                            </Link>
+                            <Link
                               className="btn btn-secondary mx-2 btn-sm"
                               type="button"
+                              to={`/post-view/${postItem?.id}`}
                             >
                               View
-                            </a>
-                            <a
+                            </Link>
+                            <Link
                               className="btn btn-primary mx-2 btn-sm"
                               type="button"
+                              to={`/post-edit/${postItem?.id}`}
                             >
                               Edit
-                            </a>
-                            <a
+                            </Link>
+                            <Link
                               className="btn btn-danger mx-2 btn-sm"
                               type="button"
+                              //to={`/post-delete/${postItem?.id}`}
+                              onClick={(e) => handlePostDelete(e, postItem?.id)}
                             >
                               Delete
-                            </a>
+                            </Link>
                           </td>
                         </tr>
                       );
