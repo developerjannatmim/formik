@@ -29,10 +29,18 @@ const PostDetail = () => {
   return (
     <>
       <div>
-        <Navbar/>
+        <Navbar />
       </div>
       <div className="container">
         <div className="card">
+          <div className="card-header">
+            <h4>
+              Post Details
+              <a href="/posts" className="btn btn-primary btn-sm float-end">
+                View Post
+              </a>
+            </h4>
+          </div>
           <section className="section about-section gray-bg" id="about">
             <div className="container">
               <div
@@ -50,7 +58,7 @@ const PostDetail = () => {
                           <p>{postItem?.title}</p>
                         </div>
                         <div className="media">
-                          <label>description</label>
+                          <label>Description</label>
                           <p>{postItem?.description}</p>
                         </div>
                       </div>

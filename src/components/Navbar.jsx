@@ -1,7 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    localStorage.clear();
+    navigate('/login');
+  }
   return (
     <>
       <div className="bg-black">
@@ -38,9 +43,9 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link text-white" to="#">
+                  <button className="nav-link text-white" onClick={handleClick}>
                     Logout
-                  </Link>
+                  </button>
                 </li>
               </ul>
             </div>

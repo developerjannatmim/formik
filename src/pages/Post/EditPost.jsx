@@ -1,73 +1,53 @@
 import React, { useState, useEffect } from 'react';
 import * as Yup from 'yup';
-import { useFormik } from 'formik';
+import { Formik } from 'formik';
 import { useParams, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-
-const initialValues = {
-  title: '',
-  description: '',
-  image: '',
-};
-
-const editPostSchema = Yup.object({
-  title: Yup.string().max(100).required(),
-  description: Yup.string().max(1000).required(),
-  image: Yup.mixed()
-    .nullable()
-    .test(
-      'FILE_SIZE',
-      'Upload File is too big',
-      (value) => !value || (value && value.size <= 1048 * 2048)
-    )
-    .required(),
-});
 
 const EditPost = () => {
   const navigate = useNavigate();
   const [postItem, setPostItem] = useState(null);
   const { id } = useParams();
 
-  const {
-    values,
-    errors,
-    touched,
-    handleSubmit,
-    handleChange,
-    handleBlur,
-    setFieldValue,
-  } = useFormik({
-    initialValues,
-    validationSchema: editPostSchema,
-    onSubmit: (values, action) => {
-      const formData = new FormData();
-      formData.append('_method', 'PUT');
-      formData.append('title', values.title);
-      formData.append('description', values.description);
-      formData.append('image', values.image);
-      console.log(formData);
+  const handleChange = (e) => {
+    e.preventDefault();
+    setPostItem((values) => ({ ...values, [e.target.name]: e.target.value }));
+  };
 
-      fetch(`http://127.0.0.1:8000/api/posts/${id}`, {
-        body: formData,
-        headers: {
-          Accept: 'application/json',
-        },
-        method: 'POST',
-      })
-        .then((response) => response.json())
-        .then((response) => {
-          if (response?.status === 200) {
-            console.log(response);
-            Swal.fire('Success', response.message, 'success');
-            navigate('/posts');
-          } else {
-            Swal.fire('Warning', response.errors, 'warning');
-            navigate(`/post-edit/${id}`);
-          }
-        });
-      //action.resetForm();
-    },
-  });
+  const handleImage = (e) => {
+    e.preventDefault();
+    setPostItem((values) => ({ ...values, [e.target.name]: e.target.files[0] }));
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('_method', 'PUT');
+    formData.append('title', postItem.title);
+    formData.append('description', postItem.description);
+    formData.append('image', postItem.image);
+
+    console.log(formData);
+
+    fetch(`http://127.0.0.1:8000/api/posts/${id}`, {
+      body: formData,
+      headers: {
+        Accept: 'application/json',
+      },
+      method: 'POST',
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response?.status === 200) {
+          console.log(response);
+          Swal.fire('Success', response.message, 'success');
+          navigate('/posts');
+        } else {
+          Swal.fire('Warning', response.errors, 'warning');
+          navigate(`/post-edit/${id}`);
+        }
+      });
+  };
 
   useEffect(() => {
     fetch(`http://127.0.0.1:8000/api/posts/${id}`, {
@@ -119,49 +99,31 @@ const EditPost = () => {
                         <input
                           type="text"
                           onChange={handleChange}
-                          value={values?.title || ''}
+                          value={postItem?.title || ''}
                           name="title"
                           className="form-control"
                         />
                       </div>
-                      <small className="text-danger mt-5">
-                        {errors.title && touched.title ? (
-                          <p className="form-error">{errors.title}</p>
-                        ) : null}
-                      </small>
                       <div className="form-group mb-3">
                         <label>Description</label>
                         <textarea
                           type="text"
                           onChange={handleChange}
-                          value={values?.description || ''}
+                          value={postItem?.description || ''}
                           name="description"
                           className="form-control"
                         />
+
                       </div>
-                      <small className="text-danger mt-5">
-                        {errors.description && touched.description ? (
-                          <p className="form-error">{errors.description}</p>
-                        ) : null}
-                      </small>
                       <div className="form-group mb-3">
                         <label>Image</label>
                         <input
                           type="file"
-                          onChange={(event) => {
-                            setFieldValue(
-                              'image',
-                              event.currentTarget.files[0]
-                            );
-                          }}
+                          name='image'
+                          onChange={handleImage}
                           className="form-control"
                         />
                       </div>
-                      <small className="text-danger mt-5">
-                        {errors.image && touched.image ? (
-                          <p className="form-error">{errors.image}</p>
-                        ) : null}
-                      </small>
                       <button type="submit" className="btn btn-primary px-4">
                         Submit
                       </button>
